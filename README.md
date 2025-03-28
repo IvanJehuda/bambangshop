@@ -63,7 +63,7 @@ You can install Postman via this website: https://www.postman.com/downloads/
     -   [X] Commit: `Implement subscribe function in Notification controller.`
     -   [X] Commit: `Implement unsubscribe function in Notification service.`
     -   [X] Commit: `Implement unsubscribe function in Notification controller.`
-    -   [ ] Write answers of your learning module's "Reflection Publisher-2" questions in this README.
+    -   [X] Write answers of your learning module's "Reflection Publisher-2" questions in this README.
 -   **STAGE 3: Implement notification mechanism**
     -   [ ] Commit: `Implement update method in Subscriber model to send notification HTTP requests.`
     -   [ ] Commit: `Implement notify function in Notification service to notify each Subscriber.`
@@ -99,6 +99,19 @@ While a **Singleton pattern** ensures a single instance of `SUBSCRIBERS`, it doe
 `DashMap`, on the other hand, **already provides a thread-safe concurrent HashMap** with fine-grained locking, meaning multiple threads can read and write to different keys simultaneously without blocking each other. This makes `DashMap` a more efficient choice compared to manually managing locks in a Singleton-based implementation.
 
 Thus, while we are technically using a Singleton (`lazy_static` ensures `SUBSCRIBERS` is initialized only once), **DashMap remains necessary for efficient, concurrent access** to the subscriber list.
+
+---
 #### Reflection Publisher-2
+### **1. Why do we need to separate “Service” and “Repository” from a Model?**
+Separating **Service** and **Repository** from the Model follows the **Single Responsibility Principle (SRP)**, making the code more modular and maintainable. The **Repository** handles database access, while the **Service** manages business logic, keeping each layer focused. This improves **scalability, testability, and flexibility**, allowing us to modify business rules or change the database without affecting the entire system.
+
+
+### **2. What happens if we only use the Model?**
+If everything is handled in the **Model**, it becomes too complex, leading to **tight coupling, redundant code, and difficult debugging**. For example, in **BambangShop**, if `Program`, `Subscriber`, and `Notification` interact directly, it could cause **circular dependencies** and make updates harder. By using **Services** to manage logic and **Repositories** for data access, we keep the system **organized and easy to maintain**.
+
+
+### **3. How has Postman helped in testing?**
+Postman helps test APIs efficiently by allowing us to **send HTTP requests (GET, POST, PUT, DELETE), automate tests, and manage API environments**. It speeds up debugging by providing **quick feedback on API responses** before integrating them into a frontend. Features like **mock servers, test scripts, and collection runners** make it a valuable tool for both individual and team development.
+
 
 #### Reflection Publisher-3
