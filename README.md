@@ -69,7 +69,7 @@ You can install Postman via this website: https://www.postman.com/downloads/
     -   [X] Commit: `Implement notify function in Notification service to notify each Subscriber.`
     -   [X] Commit: `Implement publish function in Program service and Program controller.`
     -   [X] Commit: `Edit Product service methods to call notify after create/delete.`
-    -   [ ] Write answers of your learning module's "Reflection Publisher-3" questions in this README.
+    -   [X] Write answers of your learning module's "Reflection Publisher-3" questions in this README.
 
 ## Your Reflections
 This is the place for you to write reflections:
@@ -113,5 +113,28 @@ If everything is handled in the **Model**, it becomes too complex, leading to **
 ### **3. How has Postman helped in testing?**
 Postman helps test APIs efficiently by allowing us to **send HTTP requests (GET, POST, PUT, DELETE), automate tests, and manage API environments**. It speeds up debugging by providing **quick feedback on API responses** before integrating them into a frontend. Features like **mock servers, test scripts, and collection runners** make it a valuable tool for both individual and team development.
 
-
+---
 #### Reflection Publisher-3
+
+
+### **1. Which variation of the Observer Pattern do we use in this tutorial?**
+In this tutorial, we use the **Push model** because the publisher (BambangShop) actively **sends notifications** to all registered subscribers when an event occurs (e.g., product creation, deletion). The subscribers don't have to request updates—they simply wait to receive data via their `/receive` endpoint.
+
+### **2. Advantages and Disadvantages of Using the Pull Model Instead**
+If we used the **Pull model**, subscribers would have to **periodically request updates** instead of receiving them automatically.
+
+**Advantages:**
+- Reduces sudden bursts of network traffic, as the main app wouldn’t need to notify all subscribers instantly.
+- More resilient to subscriber downtime, as they can fetch missed updates when they come back online.
+
+**Disadvantages:**
+- Introduces **unnecessary polling**, creating extra network traffic even when there are no updates.
+- Notifications become **delayed**, as subscribers only receive them during their next polling cycle.
+- Requires additional **state tracking**, so the main app remembers which notifications each subscriber has already seen.
+
+
+### **3. What happens if we don’t use multi-threading in the notification process?**
+Without multi-threading, notifications would be sent **sequentially**, meaning the app would process one subscriber at a time. If there are **100 subscribers** and each request takes **500ms**, the app would take **50 seconds** to notify everyone—causing long delays and making the system unresponsive.
+
+This would result in **slow user experience**, blocking other requests, and making the app feel "frozen." In extreme cases, network timeouts could cause the system to **stall for minutes**, leading to poor performance. Multi-threading prevents this by **sending notifications concurrently**, ensuring smooth operation.
+
