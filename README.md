@@ -56,7 +56,7 @@ You can install Postman via this website: https://www.postman.com/downloads/
     -   [X] Commit: `Implement add function in Subscriber repository.`
     -   [X] Commit: `Implement list_all function in Subscriber repository.`
     -   [X] Commit: `Implement delete function in Subscriber repository.`
-    -   [ ] Write answers of your learning module's "Reflection Publisher-1" questions in this README.
+    -   [X] Write answers of your learning module's "Reflection Publisher-1" questions in this README.
 -   **STAGE 2: Implement services and controllers**
     -   [ ] Commit: `Create Notification service struct skeleton.`
     -   [ ] Commit: `Implement subscribe function in Notification service.`
@@ -78,6 +78,27 @@ This is the place for you to write reflections:
 
 #### Reflection Publisher-1
 
+
+### 1. **Do we need an interface (trait) in this BambangShop case, or is a single Model struct enough?**
+In the Observer pattern, an interface (or trait in Rust) is useful when there are multiple subscriber types with different behaviors that need to conform to a common contract. However, in the case of BambangShop, if all subscribers share the same behavior and structure, then using a single Model struct is sufficient.
+
+A trait would only be necessary if we anticipated different types of subscribers (e.g., email subscribers, webhook subscribers, etc.) that needed different implementations for the `update` method. Since the current implementation only involves one type of subscriber, adding a trait would add unnecessary complexity without any real benefit.
+
+
+### 2. **Is using `Vec` (list) sufficient for storing unique IDs, or is `DashMap` necessary?**
+Using `Vec` would not be ideal in this case because it does not provide efficient lookups for unique identifiers. In a `Vec`, checking for uniqueness or retrieving a subscriber would require iterating through the entire list, which has a time complexity of **O(n)**. As the number of subscribers grows, this becomes inefficient.
+
+On the other hand, `DashMap` (a concurrent HashMap) allows for **O(1) lookups**, insertions, and deletions, making it more efficient when dealing with a growing list of unique identifiers such as program IDs or subscriber URLs. Additionally, `DashMap` is thread-safe, which is crucial in a multi-threaded web application where multiple users might subscribe or unsubscribe simultaneously.
+
+Thus, **DashMap is necessary** because it provides both **efficient lookups** and **thread safety** without requiring manual synchronization.
+
+
+### 3. **Do we still need DashMap for thread safety, or can we implement a Singleton pattern instead?**
+While a **Singleton pattern** ensures a single instance of `SUBSCRIBERS`, it does not inherently provide **thread safety** for concurrent reads and writes. If we were to implement our own thread-safe Singleton, we would need to wrap a HashMap with **Mutex** or **RwLock**, which could introduce potential performance bottlenecks due to locking overhead.
+
+`DashMap`, on the other hand, **already provides a thread-safe concurrent HashMap** with fine-grained locking, meaning multiple threads can read and write to different keys simultaneously without blocking each other. This makes `DashMap` a more efficient choice compared to manually managing locks in a Singleton-based implementation.
+
+Thus, while we are technically using a Singleton (`lazy_static` ensures `SUBSCRIBERS` is initialized only once), **DashMap remains necessary for efficient, concurrent access** to the subscriber list.
 #### Reflection Publisher-2
 
 #### Reflection Publisher-3
